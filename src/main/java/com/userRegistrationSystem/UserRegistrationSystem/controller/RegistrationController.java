@@ -15,6 +15,6 @@ public class RegistrationController {
     @PostMapping("/register")
     public String registerUser(@RequestBody UserModel userModel){
         User user = userService.registerUser(userModel);
-        return null;
+        return "Success";
     }
 }
