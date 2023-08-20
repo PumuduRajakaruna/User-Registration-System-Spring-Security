@@ -6,9 +6,11 @@ import com.userRegistrationSystem.UserRegistrationSystem.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 @Slf4j
+@Component
 public class RegistrationCompleteEventListener implements ApplicationListener<RegistrationCompleteEvent> {
     @Autowired
     private UserService userService;

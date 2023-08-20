@@ -28,8 +28,8 @@ public class WebSecurityConfig {
                   .and()
                   .csrf()
                   .disable()
-                  .authorizeHttpRequests()
-                  .antMatchers(WHITE_LIST_URLS ).permitAll();
+                  .authorizeHttpRequests().requestMatchers(WHITE_LIST_URLS)
+                  .permitAll();
 
           return http.build();
 
