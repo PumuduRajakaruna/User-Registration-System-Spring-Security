@@ -1,15 +1,18 @@
 package com.userRegistrationSystem.UserRegistrationSystem.controller;
 
 import com.userRegistrationSystem.UserRegistrationSystem.entity.User;
+import com.userRegistrationSystem.UserRegistrationSystem.entity.VerificationToken;
 import com.userRegistrationSystem.UserRegistrationSystem.event.RegistrationCompleteEvent;
 import com.userRegistrationSystem.UserRegistrationSystem.model.UserModel;
 import com.userRegistrationSystem.UserRegistrationSystem.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Slf4j
 public class RegistrationController {
     @Autowired
     private UserService userService;
@@ -32,6 +35,22 @@ public class RegistrationController {
             return "User Verified Successfully";
         }
         return "Bad User";
+    }
+
+    @GetMapping("/resendVerifyToken")
+    public String resendVerificationToken(@RequestParam("token") String oldToken,
+                                           HttpServletRequest request){
+        VerificationToken verificationToken = userService.generateNewVerificationToken(oldToken);
+        User user = verificationToken.getUser();
+        resendVerificationTokenMail(user, applicationUrl(request), verificationToken);
+        return "Verification Link Sent";
+    }
+
+    private void resendVerificationTokenMail(User user, String applicationUrl, VerificationToken verificationToken) {
+        String url = applicationUrl + "verifyRegistration?token=" + verificationToken.getToken();
+
+        //sendVerificationEmail()
+        log.info("Click the link to verify your account: {}", url);
     }
 
     private String applicationUrl(HttpServletRequest request) {
